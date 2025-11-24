@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Dashboard</title></head>
+<body>
+
+<h2 th:text="'Welcome, ' + ${user.name}"></h2>
+<a href="/logout">Logout</a>
+
+<hr/>
+
+<h3>Add Property</h3>
+<form method="post" action="/property/add">
+    <input name="title" placeholder="Title"/>
+    <input name="type" placeholder="Type"/>
+    <input name="price" placeholder="Price"/>
+    <input name="size" placeholder="Size"/>
+    <input name="location" placeholder="Location"/>
+    <button type="submit">Add</button>
+</form>
+
+<hr/>
+
+<h3>Properties</h3>
+<table border="1">
+    <tr>
+        <th>Title</th><th>Price</th><th>Action</th>
+    </tr>
+    <tr th:each="p : ${properties}">
+        <td th:text="${p.title}"></td>
+        <td th:text="${p.price}"></td>
+        <td>
+            <form method="post" action="/property/delete">
+                <input type="hidden" name="id" th:value="${p.id}"/>
+                <button>Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

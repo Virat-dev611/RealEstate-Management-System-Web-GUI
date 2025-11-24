@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home | Real Estate</title>
+</head>
+<body>
+<h1>Property Listings</h1>
+
+<div th:each="p : ${properties}">
+    <h3 th:text="${p.title}"></h3>
+    <p th:text="${p.location}"></p>
+    <p>Price: <span th:text="${p.price}"></span></p>
+</div>
+
+
+<a href="/login">Login</a>
+</body>
+</html>
