@@ -1,41 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><title>Dashboard</title></head>
-<body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
 
-<h2 th:text="'Welcome, ' + ${user.name}"></h2>
-<a href="/logout">Logout</a>
+<body class="bg-gray-100">
 
-<hr/>
+<div th:replace="components/navbar.html :: navbar"></div>
 
-<h3>Add Property</h3>
-<form method="post" action="/property/add">
-    <input name="title" placeholder="Title"/>
-    <input name="type" placeholder="Type"/>
-    <input name="price" placeholder="Price"/>
-    <input name="size" placeholder="Size"/>
-    <input name="location" placeholder="Location"/>
-    <button type="submit">Add</button>
-</form>
+<div class="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<hr/>
+    <div class="bg-white p-6 shadow rounded-xl">
+        <h2 class="text-gray-600">Total Properties</h2>
+        <p class="text-4xl font-bold text-blue-600">24</p>
+    </div>
 
-<h3>Properties</h3>
-<table border="1">
-    <tr>
-        <th>Title</th><th>Price</th><th>Action</th>
-    </tr>
-    <tr th:each="p : ${properties}">
-        <td th:text="${p.title}"></td>
-        <td th:text="${p.price}"></td>
-        <td>
-            <form method="post" action="/property/delete">
-                <input type="hidden" name="id" th:value="${p.id}"/>
-                <button>Delete</button>
-            </form>
-        </td>
-    </tr>
-</table>
+    <div class="bg-white p-6 shadow rounded-xl">
+        <h2 class="text-gray-600">Bookings</h2>
+        <p class="text-4xl font-bold text-green-600">12</p>
+    </div>
+
+    <div class="bg-white p-6 shadow rounded-xl">
+        <h2 class="text-gray-600">Users</h2>
+        <p class="text-4xl font-bold text-purple-600">58</p>
+    </div>
+
+</div>
+
+<div th:replace="components/footer.html :: footer"></div>
 
 </body>
 </html>

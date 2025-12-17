@@ -1,26 +1,38 @@
 package com.realestate.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "bookings")
 public class Booking {
-    private int id;
-    private int propertyId;
-    private int userId;
-    private String message;
-    private String status;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Booking() {}
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "property_id")
+    private Property property;
 
-    public int getPropertyId() { return propertyId; }
-    public void setPropertyId(int propertyId) { this.propertyId = propertyId; }
+    @NotNull
+    private String status = "PENDING"; // PENDING / APPROVED / REJECTED
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+    public Property getProperty() { return property; }
+    public void setProperty(Property property) { this.property = property; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -1,27 +1,14 @@
 package com.realestate.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.realestate.model.Booking;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class BookingRepository {
+import java.util.List;
 
-    @Autowired
-    private JdbcTemplate jdbc;
+public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Transactional
-    public boolean createBooking(int propertyId, int userId, String message){
-        int ok = jdbc.update(
-            "UPDATE properties SET status='BOOKED' WHERE id=? AND status='AVAILABLE'",
-            propertyId
-        );
-        if(ok == 0) return false;
+    List<Booking> findByUserId(Long userId);
 
-        jdbc.update("INSERT INTO bookings(property_id,user_id,message,status) VALUES (?,?,?,?)",
-            propertyId, userId, message, "PENDING");
-
-        return true;
-    }
+    // For admin dashboard recent bookings
+    List<Booking> findTop10ByOrderByCreatedAtDesc();
 }

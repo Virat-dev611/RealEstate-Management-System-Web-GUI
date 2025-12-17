@@ -1,0 +1,105 @@
+<!-- templates/components/navbar.html -->
+<nav th:fragment="navbar"
+     x-data="{ open: false }"
+     class="bg-blue-600 text-white shadow-md">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+        <!-- Logo -->
+        <a href="/" class="text-2xl font-bold tracking-wide">Real Estate</a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+
+            <a href="/" class="hover:text-gray-200">Home</a>
+            <a href="/properties/list" class="hover:text-gray-200">Properties</a>
+
+            <!-- Show only if user is logged in -->
+            <a th:if="${session.user != null}"
+               href="/booking/my"
+               class="hover:text-gray-200">
+               My Bookings
+            </a>
+
+            <!-- Show Add Property for OWNER + ADMIN -->
+            <a th:if="${session.user != null and (session.user.role == 'ROLE_OWNER' or session.user.role == 'ROLE_ADMIN')}"
+               href="/properties/add"
+               class="hover:text-gray-200 font-semibold">
+               + Add Property
+            </a>
+
+            <!-- Show dashboard only for ADMIN -->
+            <a th:if="${session.user != null and session.user.role == 'ROLE_ADMIN'}"
+               href="/admin/dashboard"
+               class="hover:text-gray-200">
+               Dashboard
+            </a>
+
+            <!-- Login if user is NOT logged in -->
+            <a th:if="${session.user == null}"
+               href="/login"
+               class="bg-white text-blue-600 px-4 py-1 rounded-lg font-semibold hover:bg-gray-200">
+               Login
+            </a>
+
+            <!-- Logout if user IS logged in -->
+            <a th:if="${session.user != null}"
+               href="/logout"
+               class="bg-white text-blue-600 px-4 py-1 rounded-lg font-semibold hover:bg-gray-200">
+               Logout
+            </a>
+        </div>
+
+        <!-- Mobile Hamburger Icon -->
+        <button @click="open = !open"
+                class="md:hidden focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div x-show="open" class="md:hidden bg-blue-700 text-white px-6 pb-4 space-y-4">
+
+        <a href="/" class="block hover:text-gray-200">Home</a>
+        <a href="/properties/list" class="block hover:text-gray-200">Properties</a>
+
+        <a th:if="${session.user != null}"
+           href="/booking/my"
+           class="block hover:text-gray-200">
+           My Bookings
+        </a>
+
+        <a th:if="${session.user != null and (session.user.role == 'ROLE_OWNER' or session.user.role == 'ROLE_ADMIN')}"
+           href="/properties/add"
+           class="block hover:text-gray-200 font-semibold">
+           + Add Property
+        </a>
+
+        <a th:if="${session.user != null and session.user.role == 'ROLE_ADMIN'}"
+           href="/admin/dashboard"
+           class="block hover:text-gray-200">
+           Dashboard
+        </a>
+
+        <a th:if="${session.user == null}"
+           href="/login"
+           class="block bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200">
+           Login
+        </a>
+
+        <a th:if="${session.user != null}"
+           href="/logout"
+           class="block bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200">
+           Logout
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- Alpine.js for Mobile Menu Dropdown -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+<div th:replace="~{components/navbar.html :: navbar}"></div>
+
+<div class="max-w-5xl mx-auto mt-10 bg-white p-6 shadow rounded-xl">
+
+    <h1 class="text-2xl font-bold mb-6">My Bookings</h1>
+
+    <table class="min-w-full border divide-y divide-gray-200">
+        <thead class="bg-gray-100">
+        <tr>
+            <th class="px-4 py-2 text-left">Property</th>
+            <th class="px-4 py-2 text-left">Status</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="b : ${bookings}" class="border-b">
+            <td class="px-4 py-2" th:text="${b.property.title}"></td>
+            <td class="px-4 py-2 font-semibold"
+                th:classappend="${b.status == 'APPROVED'} ? 'text-green-600' : 'text-yellow-600'"
+                th:text="${b.status}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

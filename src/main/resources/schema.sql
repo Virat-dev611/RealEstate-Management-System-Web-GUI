@@ -1,29 +1,29 @@
-CREATE DATABASE IF NOT EXISTS realestate_db;
-USE realestate_db;
-
-CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    password_hash VARCHAR(255),
-    role VARCHAR(20)
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255) UNIQUE,
+  password VARCHAR(255),
+  role VARCHAR(100)
 );
 
-CREATE TABLE properties (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(200),
-    type VARCHAR(50),
-    price DECIMAL(12,2),
-    size VARCHAR(50),
-    location VARCHAR(200),
-    status VARCHAR(40),
-    owner_id INT
+CREATE TABLE IF NOT EXISTS properties (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255),
+  description CLOB,
+  price DOUBLE,
+  location VARCHAR(255),
+  available BOOLEAN,
+  owner_id BIGINT,
+  version BIGINT,
+  CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES users(id)
 );
 
-CREATE TABLE bookings (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    property_id INT,
-    user_id INT,
-    message TEXT,
-    status VARCHAR(40)
+CREATE TABLE IF NOT EXISTS bookings (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT,
+  property_id BIGINT,
+  status VARCHAR(50),
+  created_at TIMESTAMP,
+  CONSTRAINT fk_b_user FOREIGN KEY(user_id) REFERENCES users(id),
+  CONSTRAINT fk_b_property FOREIGN KEY(property_id) REFERENCES properties(id)
 );

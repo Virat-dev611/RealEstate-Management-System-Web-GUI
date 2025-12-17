@@ -1,102 +1,80 @@
 package com.realestate.controller;
 
-import com.realestate.model.Property;
 import com.realestate.model.User;
-import com.realestate.service.BookingService;
-import com.realestate.service.PropertyService;
-import com.realestate.service.UserService;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.realestate.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 public class HomeController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PropertyService propertyService;
-    @Autowired
-    private BookingService bookingService;
+    private final UserRepository userRepo;
 
-    @GetMapping({"/", "/index"})
-    public String home(Model model){
-        model.addAttribute("properties", propertyService.all());
+    public HomeController(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    @GetMapping({"/", "/index", "/home"})
+    public String index() {
         return "index";
     }
 
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginForm() {
         return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String email,
                         @RequestParam String password,
-                        HttpSession session){
-        String hash = DigestUtils.sha256Hex(password);
-        User u = userService.login(email, hash);
-
-        if(u == null)
-            return "redirect:/login?error=true";
-
-        session.setAttribute("user", u);
-        return "redirect:/dashboard";
+                        HttpSession session,
+                        Model model) {
+        return userRepo.findByEmailAndPassword(email, password)
+                .map(user -> {
+                    // store whole user object in session (used by Thymeleaf)
+                    session.setAttribute("user", user);
+                    // optional: store a simple message
+                    model.addAttribute("success", "Logged in successfully. Role: " + user.getRole());
+                    System.out.println("Logged-in user role: " + user.getRole());
+                    return "redirect:/";
+                })
+                .orElseGet(() -> {
+                    model.addAttribute("error", "Invalid credentials");
+                    return "login";
+                });
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model, HttpSession session){
-        User u = (User) session.getAttribute("user");
-
-        if(u == null)
-            return "redirect:/login";
-
-        model.addAttribute("user", u);
-        model.addAttribute("properties", propertyService.all());
-        return "dashboard";
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
     }
 
-    @PostMapping("/property/add")
-    public String add(@ModelAttribute Property p, HttpSession session){
-        User u = (User) session.getAttribute("user");
-        if(u == null)
-            return "redirect:/login";
-
-        p.setOwnerId(u.getId());
-        p.setStatus("AVAILABLE");
-        propertyService.add(p);
-
-        return "redirect:/dashboard";
-    }
-
-    @PostMapping("/property/delete")
-    public String delete(@RequestParam int id, HttpSession session){
-        if(session.getAttribute("user") == null)
-            return "redirect:/login";
-
-        propertyService.delete(id);
-        return "redirect:/dashboard";
-    }
-
-    @PostMapping("/booking")
-    public String booking(@RequestParam int propertyId,
-                          @RequestParam String message,
-                          HttpSession session){
-        User u = (User) session.getAttribute("user");
-
-        if(u == null)
-            return "redirect:/login";
-
-        bookingService.book(propertyId, u.getId(), message);
-        return "redirect:/dashboard";
+    @PostMapping("/register")
+    public String register(@ModelAttribute User user, Model model, HttpSession session) {
+        // basic validation
+        if (user.getEmail() == null || user.getPassword() == null) {
+            model.addAttribute("error", "Email and password are required");
+            return "register";
+        }
+        if (userRepo.existsByEmail(user.getEmail())) {
+            model.addAttribute("error", "Email already registered");
+            return "register";
+        }
+        // default role if not set
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("ROLE_USER");
+        }
+        User saved = userRepo.save(user);
+        session.setAttribute("user", saved);
+        model.addAttribute("success", "Registered and logged in");
+        return "redirect:/";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
