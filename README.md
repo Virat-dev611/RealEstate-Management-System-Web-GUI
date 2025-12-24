@@ -129,8 +129,8 @@ Login & Registration
 ![Registration](https://github.com/Virat-dev611/RealEstate-Management-System-Web-GUI/blob/234a4f600359356f70d3bcdee03f753681225124/Screenshot%202025-12-18%20104212.png)
 Property Listing
 ![Property Listing](https://github.com/Virat-dev611/RealEstate-Management-System-Web-GUI/blob/48614ff6e321ab4b00e7698ce4938dff9a2c7f2a/Screenshot%202025-12-18%20104251.png)
-##Add Property
-
+Add Property
+![Add Property](https://github.com/Virat-dev611/RealEstate-Management-System-Web-GUI/blob/3760bece779627d462935033be739b11e965c812/Screenshot%202025-12-24%20202939.png)
 My Bookings
 
 Admin Dashboard
