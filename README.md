@@ -125,7 +125,7 @@ All UI screenshots are included in the /screenshots folder:
 ##Home Page
 ![Home Page](https://github.com/Virat-dev611/RealEstate-Management-System-Web-GUI/blob/2727130676b3304c7251b0a8075ed86d87bb5cfd/Screenshot%202025-12-18%20104133.png)
 Login & Registration
-
+![login](https://github.com/Virat-dev611/RealEstate-Management-System-Web-GUI/blob/c8ea115669f8f190b8dfb672512a476bb9b26dbc/Screenshot%202025-12-18%20104145.png)
 ##Property Listing
 
 ##Add Property
